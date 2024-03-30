@@ -9,6 +9,16 @@ variable "gke_cluster_type" {
   default     = "zonal"
 }
 
+variable "machine_type" {
+  description = "machine_type"
+  default     = "g1-small"
+}
+
+variable "disk_size_gb" {
+  description = "disk_size_gb"
+  default     = 20
+}
+
 variable "gcp_region" {
   description = "Регион"
 }
