@@ -17,8 +17,9 @@ provider "google" {
 
 
 resource "google_container_cluster" "primary" {
-  name     = "my-gke-cluster"
-  location = var.gcp_region
+  name = "my-gke-cluster"
+
+  location = var.gke_cluster_type == "regional" ? var.gcp_region : var.gcp_region_zone
 
   remove_default_node_pool = true
   initial_node_count       = 1
@@ -33,10 +34,26 @@ resource "google_container_cluster" "primary" {
 }
 
 resource "google_container_node_pool" "primary_preemptible_nodes" {
-  name       = "my-node-pool"
-  location   = var.gcp_region
-  cluster    = google_container_cluster.primary.name
-  node_count = 1
+  name = "my-node-pool"
+
+  location = var.gke_cluster_type == "regional" ? var.gcp_region : var.gcp_region_zone
+
+  cluster            = google_container_cluster.primary.name
+  initial_node_count = 1
+
+  lifecycle {
+    ignore_changes = [initial_node_count]
+  }
+
+  autoscaling {
+    min_node_count = 1
+    max_node_count = 3
+  }
+
+  management {
+    auto_repair  = true
+    auto_upgrade = true
+  }
 
   node_config {
     preemptible  = var.gcp_preemptible_nodes

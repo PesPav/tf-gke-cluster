@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-server
+  labels:
+    app: auth-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-server
+  template:
+    metadata:
+      labels:
+        app: auth-server
+    spec:
+      containers:
+        - name: auth-server
+          image: ifilyaninitmo/auth-server-mega-itmo:main
+          ports:
+            - containerPort: 8000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: time-server
+  labels:
+    app: time-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: time-server
+  template:
+    metadata:
+      labels:
+        app: time-server
+    spec:
+      containers:
+        - name: time-server
+          image: ifilyaninitmo/time-server-mega-itmo:main
+          ports:
+            - containerPort: 8001

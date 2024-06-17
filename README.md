@@ -1,2 +1,0 @@
-# gitlab-tf-gke-cluster
-
